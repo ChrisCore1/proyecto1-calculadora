@@ -5,7 +5,11 @@ const calculate = () => {
   if (!screen.value) return;
 
   try {
-    const expression = screen.value;
+    const expression = screen.value
+      .replace(/(\d)\(/g, '$1*(')
+      .replace(/\)(\d)/g, ')*$1')
+      .replace(/\)\(/g, ')*(');
+
     screen.value = eval(expression);
   } catch {
     screen.value = 'ERROR';
@@ -33,4 +37,14 @@ buttons.forEach((button) => {
 
     screen.value += pressButton;
   });
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') {
+    calculate();
+  }
+});
+
+screen.addEventListener('input', () => {
+  screen.value = screen.value.replace(/[^0-9+\-*/.()]/g, '');
 });
