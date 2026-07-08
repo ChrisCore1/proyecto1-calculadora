@@ -1,8 +1,12 @@
 const screen = document.querySelector('.screen');
-const buttons = document.querySelectorAll('.btn');
+const buttons = document.querySelectorAll('.btn:not(#cleanHistory)');
+const operationsHistoryList = document.querySelector('.operationsHistoryList');
+const btnCleanHistory = document.getElementById('cleanHistory');
 
 const calculate = () => {
   if (!screen.value) return;
+
+  const getOperation = screen.value;
 
   try {
     const expression = screen.value
@@ -10,10 +14,23 @@ const calculate = () => {
       .replace(/\)(\d)/g, ')*$1')
       .replace(/\)\(/g, ')*(');
 
-    screen.value = eval(expression);
+    const result = eval(expression);
+
+    if (getOperation !== String(result)) {
+      addToHistory(getOperation, result);
+    }
+
+    screen.value = result;
   } catch {
     screen.value = 'ERROR';
   }
+};
+
+const addToHistory = (operation, result) => {
+  const itemHistory = document.createElement('div');
+  itemHistory.classList.add('itemHistory');
+  itemHistory.textContent = `${operation} = ${result}`;
+  operationsHistoryList.append(itemHistory);
 };
 
 buttons.forEach((button) => {
@@ -47,4 +64,8 @@ document.addEventListener('keydown', (e) => {
 
 screen.addEventListener('input', () => {
   screen.value = screen.value.replace(/[^0-9+\-*/.()]/g, '');
+});
+
+btnCleanHistory.addEventListener('click', () => {
+  operationsHistoryList.textContent = '';
 });

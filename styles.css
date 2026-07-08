@@ -12,6 +12,15 @@ body {
     place-items: center;
 }
 
+.principalContainer {
+    display: flex;
+    gap: 2rem;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 100%;
+}
+
 .calculator {
     background-color: #070814;
     color: white;
@@ -55,12 +64,50 @@ body {
 
 #equal,
 #clearAll,
-#deleteNumber {
+#deleteNumber,
+#cleanHistory {
     background-color: #4bbda4b4;
 }
 
 #equal:hover,
 #clearAll:hover,
-#deleteNumber:hover {
+#deleteNumber:hover,
+#cleanHistory:hover {
     background-color: #3baa65;
+}
+
+.containerHistory {
+    background-color: #070814;
+    width: 500px;
+    height: 435px;
+    padding: 1.5rem;
+    border-radius: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.operationsHistoryList {
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+    padding-right: .5rem;
+}
+
+.itemHistory {
+    background-color: #15173c;
+    color: white;
+    padding: .5rem;
+    border-radius: .5rem;
+    font-family: monospace;
+    font-size: 1rem;
+    text-align: right;
+    border-left: 4px solid #3844e6;
+}
+
+#cleanHistory {
+    border-radius: 1.5rem;
+    padding: .5rem;
+    grid-column: span 5;
 }
