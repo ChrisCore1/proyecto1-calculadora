@@ -17,7 +17,7 @@ const calculate = () => {
     const result = eval(expression);
 
     if (getOperation !== String(result)) {
-      addToHistory(getOperation, result);
+      addToLocalStorage(getOperation, result);
     }
 
     screen.value = result;
@@ -26,11 +26,28 @@ const calculate = () => {
   }
 };
 
-const addToHistory = (operation, result) => {
+const addToHistoryView = (operation, result) => {
   const itemHistory = document.createElement('div');
   itemHistory.classList.add('itemHistory');
   itemHistory.textContent = `${operation} = ${result}`;
   operationsHistoryList.append(itemHistory);
+};
+
+const addToLocalStorage = (operation, result) => {
+  addToHistoryView(operation, result);
+  const arrayHistory =
+    JSON.parse(localStorage.getItem('keyOperationsHistory')) || [];
+  arrayHistory.push({ operation, result });
+  localStorage.setItem('keyOperationsHistory', JSON.stringify(arrayHistory));
+};
+
+const loadHistory = () => {
+  const arrayHistory =
+    JSON.parse(localStorage.getItem('keyOperationsHistory')) || [];
+
+  arrayHistory.forEach((item) => {
+    addToHistoryView(item.operation, item.result);
+  });
 };
 
 buttons.forEach((button) => {
@@ -67,5 +84,15 @@ screen.addEventListener('input', () => {
 });
 
 btnCleanHistory.addEventListener('click', () => {
-  operationsHistoryList.textContent = '';
+  if (
+    localStorage.getItem('keyOperationsHistory') &&
+    confirm(
+      'Esta seguro de limpiar el historial? Este proceso lo eliminara de forma permanente',
+    )
+  ) {
+    operationsHistoryList.textContent = '';
+    localStorage.removeItem('keyOperationsHistory');
+  }
 });
+
+loadHistory();
