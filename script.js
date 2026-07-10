@@ -6,7 +6,7 @@ const btnCleanHistory = document.getElementById('cleanHistory');
 const calculate = () => {
   if (!screen.value) return;
 
-  const getOperation = screen.value;
+  const getOperationByScreen = screen.value;
 
   try {
     const expression = screen.value
@@ -15,9 +15,10 @@ const calculate = () => {
       .replace(/\)\(/g, ')*(');
 
     const result = eval(expression);
+    const operation = getOperationByScreen + ' = ' + result;
 
-    if (getOperation !== String(result)) {
-      addToLocalStorage(getOperation, result);
+    if (getOperationByScreen !== String(result)) {
+      addToLocalStorage(operation);
     }
 
     screen.value = result;
@@ -26,18 +27,18 @@ const calculate = () => {
   }
 };
 
-const addToHistoryView = (operation, result) => {
+const addToHistoryView = (operation) => {
   const itemHistory = document.createElement('div');
   itemHistory.classList.add('itemHistory');
-  itemHistory.textContent = `${operation} = ${result}`;
+  itemHistory.textContent = `${operation}`;
   operationsHistoryList.append(itemHistory);
 };
 
-const addToLocalStorage = (operation, result) => {
-  addToHistoryView(operation, result);
+const addToLocalStorage = (operation) => {
+  addToHistoryView(operation);
   const arrayHistory =
     JSON.parse(localStorage.getItem('keyOperationsHistory')) || [];
-  arrayHistory.push({ operation, result });
+  arrayHistory.push(operation);
   localStorage.setItem('keyOperationsHistory', JSON.stringify(arrayHistory));
 };
 
@@ -45,8 +46,8 @@ const loadHistory = () => {
   const arrayHistory =
     JSON.parse(localStorage.getItem('keyOperationsHistory')) || [];
 
-  arrayHistory.forEach((item) => {
-    addToHistoryView(item.operation, item.result);
+  arrayHistory.forEach((operation) => {
+    addToHistoryView(operation);
   });
 };
 
